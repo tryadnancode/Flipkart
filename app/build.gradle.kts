@@ -43,4 +43,6 @@ dependencies {
 
     implementation("androidx.recyclerview:recyclerview:1.3.0")
 
+    implementation ("com.hbb20:ccp:2.6.0")
+
 }

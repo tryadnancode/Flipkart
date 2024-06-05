@@ -3,6 +3,9 @@
     <style name="Base.Theme.Flipkart" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/my_dark_primary</item>
+        <item name="appWindowBack">@color/my_dark_primary</item>
+        <item name="textColor">@color/black</item>
+
     </style>
 
     <style name="Theme.Flipkart" parent="Base.Theme.Flipkart" />

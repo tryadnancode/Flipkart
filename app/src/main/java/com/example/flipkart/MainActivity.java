@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,22 +53,33 @@ public class MainActivity extends AppCompatActivity {
                     if(itemId == R.id.account){
                         Intent i = new Intent(MainActivity.this,Login.class);
                         startActivity(i);
+                        finish();
                         return true;
                 }
-//                    if(itemId == R.id.home){
-//                        Intent i = new Intent(MainActivity.this,MainActivity.class);
-//                        startActivity(i);
-//                        return true;
-//                    }
+                    if(itemId == R.id.home){
+                        Intent i = new Intent(MainActivity.this,MainActivity.class);
+                        startActivity(i);
+                        finish();
+                        return true;
+                    }
                     if(itemId == R.id.categories){
                         Snackbar.make(findViewById(R.id.bottom_nav),"Categories",Snackbar.LENGTH_SHORT).show();
                         return true;
+                    } if(itemId == R.id.explore){
+                    Fragment myFragment = new Explore();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.main, myFragment).commit();
+                        return true;
+                    }if(itemId == R.id.cart){
+                    Fragment myFragment = new Cart();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.main, myFragment).commit();
+                    return true;
                     }
                 return false;
             }
         });
     }
-
     private void MarqueeScroll() {
         marqueeText1.setSelected(true);
         handler = new Handler();
