@@ -7,6 +7,11 @@
         <item name="textColor">@color/black</item>
 
     </style>
-
     <style name="Theme.Flipkart" parent="Base.Theme.Flipkart" />
+
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FF9800</item>
+        <item name="colorControlActivated">#A82E07</item>
+    </style>
 </resources>

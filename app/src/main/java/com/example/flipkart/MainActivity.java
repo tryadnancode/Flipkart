@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     Runnable runnable;
     int currentIndex = 0;
     BottomNavigationView bottomNavigationView;
-
+    FrameLayout fragmentContainer;
+    View mainActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.main, myFragment).commit();
                     return true;
                     }
-                return false;
+                return true;
             }
         });
     }
@@ -144,5 +147,7 @@ public class MainActivity extends AppCompatActivity {
         suggest_recycler = findViewById(R.id.suggest_recycler);
         marqueeText1 = findViewById(R.id.marqueeText1);
         bottomNavigationView = findViewById(R.id.bottom_nav);
+        fragmentContainer = findViewById(R.id.fragment_container);
+        mainActivity = findViewById(R.id.main);
     }
 }

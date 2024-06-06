@@ -7,4 +7,10 @@
         <item name="appWindowBack">@color/black</item>
         <item name="textColor">@color/white</item>
     </style>
+
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FF9800</item>
+        <item name="colorControlActivated">#A82E07</item>
+    </style>
 </resources>
