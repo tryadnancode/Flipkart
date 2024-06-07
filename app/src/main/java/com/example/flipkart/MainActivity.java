@@ -3,12 +3,11 @@ package com.example.flipkart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,11 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView, recent_recycler, suggest_recycler;
@@ -45,42 +46,71 @@ public class MainActivity extends AppCompatActivity {
         LayoutManager();
         MarqueeScroll();
         onClick();
+        getDataFromApi();
+        recent_recycler=findViewById(R.id.recycler_recently_viewed);
+    }
+
+    private void getDataFromApi() {
+        Call<List<ResponseModelItem>> call=RetrofitClient.getInstance().getApi().getUsers();
+        call.enqueue(new Callback<List<ResponseModelItem>>() {
+            @Override
+            public void onResponse(Call<List<ResponseModelItem>> call, Response<List<ResponseModelItem>> response) {
+                if(response.isSuccessful()){
+
+                    if(response.body() != null){
+                       getItem(response.body());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseModelItem>> call, Throwable t) {
+                Log.e("MainActivity", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+    private void getItem(List<ResponseModelItem> itemList) {
+        RecentlyAdapter recentlyAdapter = new RecentlyAdapter(this, itemList);
+        recent_recycler.setAdapter(recentlyAdapter);
+        recent_recycler.setHasFixedSize(true);
+        recent_recycler.smoothScrollToPosition(0);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recent_recycler.setLayoutManager(linearLayoutManager);
+
     }
 
     private void onClick() {
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
 
-                int itemId = item.getItemId();
-                    if(itemId == R.id.account){
-                        Intent i = new Intent(MainActivity.this,Login.class);
-                        startActivity(i);
-                        finish();
-                        return true;
-                }
-                    if(itemId == R.id.home){
-                        Intent i = new Intent(MainActivity.this,MainActivity.class);
-                        startActivity(i);
-                        finish();
-                        return true;
-                    }
-                    if(itemId == R.id.categories){
-                        Snackbar.make(findViewById(R.id.bottom_nav),"Categories",Snackbar.LENGTH_SHORT).show();
-                        return true;
-                    } if(itemId == R.id.explore){
-                    Fragment myFragment = new Explore();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main, myFragment).commit();
-                        return true;
-                    }if(itemId == R.id.cart){
-                    Fragment myFragment = new Cart();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.main, myFragment).commit();
+            int itemId = item.getItemId();
+                if(itemId == R.id.account){
+                    Intent i = new Intent(MainActivity.this,Login.class);
+                    startActivity(i);
+                    finish();
                     return true;
-                    }
-                return true;
             }
+                if(itemId == R.id.home){
+                    Intent i = new Intent(MainActivity.this,MainActivity.class);
+                    startActivity(i);
+                    finish();
+                    return true;
+                }
+                if(itemId == R.id.categories){
+                    Fragment myFragment = new Categories();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.main, myFragment).commit();                        return true;
+                } if(itemId == R.id.explore){
+                Fragment myFragment = new Explore();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.main, myFragment).commit();
+                    return true;
+                }if(itemId == R.id.cart){
+                Fragment myFragment = new Cart();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.main, myFragment).commit();
+                return true;
+                }
+            return true;
         });
     }
     private void MarqueeScroll() {
@@ -108,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recent_recycler.setLayoutManager(linearLayoutManager);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+//        recent_recycler.setLayoutManager(linearLayoutManager);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         suggest_recycler.setLayoutManager(gridLayoutManager);
@@ -129,21 +159,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void BannerData() {
         List<BannerItem> bannerItems = new ArrayList<>();
-        bannerItems.add(new BannerItem(R.drawable.logo, R.drawable.account_circle));
-        bannerItems.add(new BannerItem(R.drawable.logo_bg, R.drawable.camera));
-        bannerItems.add(new BannerItem(R.drawable.logo, R.drawable.cart));
-        bannerItems.add(new BannerItem(R.drawable.down, R.drawable.mic));
+        bannerItems.add(new BannerItem(R.drawable.logo));
+        bannerItems.add(new BannerItem(R.drawable.logo_bg));
+        bannerItems.add(new BannerItem(R.drawable.logo));
+        bannerItems.add(new BannerItem(R.drawable.down));
 
         adapter = new ScrollAdapter(this, bannerItems);
         recyclerView.setAdapter(adapter);
 
-        recent_adapter = new RecentlyAdapter(this, bannerItems);
-        recent_recycler.setAdapter(recent_adapter);
+
     }
 
     private void findId() {
         recyclerView = findViewById(R.id.recyclerView);
-        recent_recycler = findViewById(R.id.recycler_recently_viewed);
         suggest_recycler = findViewById(R.id.suggest_recycler);
         marqueeText1 = findViewById(R.id.marqueeText1);
         bottomNavigationView = findViewById(R.id.bottom_nav);

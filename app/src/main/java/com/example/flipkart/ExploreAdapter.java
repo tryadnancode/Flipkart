@@ -33,7 +33,6 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     public void onBindViewHolder(@NonNull ExploreAdapter.ViewHolder holder, int position) {
         ExploreItem item = exploreItems.get(position);
         holder.imageView.setImageResource(item.getExplore());
-        int rating = 5;
 
     }
 

@@ -7,15 +7,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHolder> {
     Context context;
-    List<BannerItem> bannerItem;
+    List<ResponseModelItem> recentItems;
 
-    public RecentlyAdapter(Context context, List<BannerItem> bannerItem) {
+    public RecentlyAdapter(Context context, List<ResponseModelItem> recentItems) {
         this.context = context;
-        this.bannerItem = bannerItem;
+        this.recentItems = recentItems;
     }
 
     @NonNull
@@ -27,13 +30,14 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull RecentlyAdapter.ViewHolder holder, int position) {
-        BannerItem item = bannerItem.get(position);
-        holder.imageView1.setImageResource(item.getImage2());
+        ResponseModelItem item = recentItems.get(position);
+//        holder.imageView1.setImageResource(item.getImage2());
+        Picasso.get().load(item.getThumbnailUrl()).into(holder.imageView1);
     }
 
     @Override
     public int getItemCount() {
-        return bannerItem.size();
+        return recentItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
