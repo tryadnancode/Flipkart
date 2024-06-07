@@ -59,15 +59,19 @@
           />
       </LinearLayout>
   </com.google.android.material.appbar.MaterialToolbar>
-
+<!--  <androidx.core.widget.NestedScrollView-->
+<!--      android:layout_width="match_parent"-->
+<!--      android:layout_height="wrap_content"-->
+<!--      app:layout_constraintTop_toBottomOf="@id/material"-->
+<!--      >-->
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/explore_recycle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/material"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/material"
       app:layout_constraintEnd_toEndOf="parent"
       android:layout_margin="5dp"
       />
-
+<!--  </androidx.core.widget.NestedScrollView>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

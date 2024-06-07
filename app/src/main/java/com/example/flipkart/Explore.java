@@ -52,6 +52,8 @@ public class Explore extends Fragment {
         List<ExploreItem> exploreItems = new ArrayList<>();
         exploreItems.add(new ExploreItem(R.drawable.down));
         exploreItems.add(new ExploreItem(R.drawable.down));
+        exploreItems.add(new ExploreItem(R.drawable.down));
+        exploreItems.add(new ExploreItem(R.drawable.down));
 
 
         exploreAdapter = new ExploreAdapter(getContext(),exploreItems);
