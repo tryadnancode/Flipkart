@@ -64,10 +64,14 @@ public class HomeFragment extends Fragment {
         ArrayList<SuggestItem> trendList = Constant.getSuggest();
         SuggestAdapter suggestAdapter = new SuggestAdapter(trendList);
         suggestRecycler.setAdapter(suggestAdapter);
-        int COLUMN_COUNT2 = 3;
+//        int COLUMN_COUNT2 = 3;
         suggestRecycler.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT2, GridLayoutManager.VERTICAL, false);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT2, GridLayoutManager.VERTICAL, false);
+//        suggestRecycler.setLayoutManager(gridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         suggestRecycler.setLayoutManager(gridLayoutManager);
+
+
 
         // Auto-scroll setup for the banner RecyclerView
         handler = new Handler();
