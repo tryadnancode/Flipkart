@@ -10,34 +10,33 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScrollAdapter extends RecyclerView.Adapter<ScrollAdapter.ViewHolder> {
-    Context context;
-    List<BannerItem> bannerItem;
+    private final ArrayList<BannerItem> list;
 
-    public ScrollAdapter(Context context, List<BannerItem> bannerItem) {
-        this.context = context;
-        this.bannerItem = bannerItem;
+    public ScrollAdapter(ArrayList<BannerItem> list) {
+        this.list = list;
     }
-
     @NonNull
     @Override
     public ScrollAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view = LayoutInflater.from(context).inflate(R.layout.scroll_layout,parent,false);
-        return new ViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.scroll_layout, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ScrollAdapter.ViewHolder holder, int position) {
-        BannerItem item = bannerItem.get(position);
+        BannerItem item = list.get(position);
         holder.imageView.setImageResource(item.getImage());
     }
 
     @Override
     public int getItemCount() {
-        return bannerItem.size();
+        return list.size();
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 

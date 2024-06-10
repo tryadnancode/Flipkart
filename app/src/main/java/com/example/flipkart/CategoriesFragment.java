@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Categories extends Fragment {
+public class CategoriesFragment extends Fragment {
     RecyclerView recyclerView;
     CategoriesAdapter categoriesAdapter;
     @Override
@@ -35,6 +35,7 @@ public class Categories extends Fragment {
 
     private void ExploreData() {
         List<CategoriesItem> categoriesItemList = new ArrayList<>();
+        categoriesItemList.add(new CategoriesItem(R.drawable.down));
         categoriesItemList.add(new CategoriesItem(R.drawable.down));
         categoriesItemList.add(new CategoriesItem(R.drawable.down));
         categoriesItemList.add(new CategoriesItem(R.drawable.down));

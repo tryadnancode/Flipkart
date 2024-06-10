@@ -9,33 +9,32 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
-    Context context;
-    List<SuggestItem> suggestItems;
+    private final ArrayList<SuggestItem> list;
 
-    public SuggestAdapter(Context context, List<SuggestItem> suggestItems) {
-        this.context = context;
-        this.suggestItems = suggestItems;
+    public SuggestAdapter(ArrayList<SuggestItem> list) {
+        this.list = list;
     }
 
     @NonNull
     @Override
     public SuggestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.suggest_grid_layout,parent,false);
-        return new ViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.suggest_grid_layout, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SuggestAdapter.ViewHolder holder, int position) {
-        SuggestItem suggestItem = suggestItems.get(position);
+        SuggestItem suggestItem = list.get(position);
         holder.imageView.setImageResource(suggestItem.getImage());
     }
 
     @Override
     public int getItemCount() {
-        return suggestItems.size();
+        return list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
