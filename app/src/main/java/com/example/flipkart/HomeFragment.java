@@ -1,48 +1,51 @@
 package com.example.flipkart;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
-
-    RecyclerView recyclerView;
-    RecyclerView recentRecycler;
-    RecyclerView suggestRecycler;
+    RecyclerView recyclerView,recentRecycler,suggestRecycler;
     TextView textView;
+    ImageView camera;
     private Handler handler;
     private Runnable scrollRunnable;
     private int currentPosition = 0;
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
+    private long backPressedTime;
+    private Toast backToast;
+    private static final int REQUEST_PERMISSION = 300;
+    private static final int REQUEST_CAMERA = 100;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+            return inflater.inflate(R.layout.fragment_home, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
         recyclerView = view.findViewById(R.id.recyclerView);
         recentRecycler = view.findViewById(R.id.recycler_recently_viewed);
         suggestRecycler = view.findViewById(R.id.suggest_recycler);
         textView = view.findViewById(R.id.marqueeText1);
+        camera = view.findViewById(R.id.camera);
+        openCamera();
+
 
         // Enable marquee effect
         textView.setSelected(true);
@@ -54,6 +57,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(bannerLayoutManager);
 
+        // Set up RecyclerView for recentRecycler
         ArrayList<SuggestItem> bannerItem = Constant.getSuggestItems();
         RecentlyAdapter recentlyAdapter = new RecentlyAdapter(bannerItem);
         recentRecycler.setAdapter(recentlyAdapter);
@@ -64,14 +68,9 @@ public class HomeFragment extends Fragment {
         ArrayList<SuggestItem> trendList = Constant.getSuggest();
         SuggestAdapter suggestAdapter = new SuggestAdapter(trendList);
         suggestRecycler.setAdapter(suggestAdapter);
-//        int COLUMN_COUNT2 = 3;
         suggestRecycler.setHasFixedSize(true);
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), COLUMN_COUNT2, GridLayoutManager.VERTICAL, false);
-//        suggestRecycler.setLayoutManager(gridLayoutManager);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         suggestRecycler.setLayoutManager(gridLayoutManager);
-
-
 
         // Auto-scroll setup for the banner RecyclerView
         handler = new Handler();
@@ -88,10 +87,43 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(scrollRunnable, 1000);
     }
 
+    private void openCamera() {
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
+                } else {
+                    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                }
+
+            }
+        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         // Stop the auto-scrolling when the fragment is destroyed
         handler.removeCallbacks(scrollRunnable);
     }
+    OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+        @Override
+        public void handleOnBackPressed() {
+            if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                if (backToast != null) {
+                    backToast.cancel();
+                }
+                requireActivity().finish(); // Finish the activity
+            } else {
+                backToast = Toast.makeText(requireContext(), "Press again to exit", Toast.LENGTH_SHORT);
+                backToast.show();
+            }
+            backPressedTime = System.currentTimeMillis();
+        }
+    };
+
+
 }

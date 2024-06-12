@@ -95,13 +95,13 @@
                     />
 
                 <ImageView
+                    android:id="@+id/camera"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="3dp"
                     android:padding="3dp"
                     android:src="@drawable/camera"
-
                     />
 
             </LinearLayout>

@@ -1,9 +1,7 @@
 package com.example.flipkart;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     ExploreFragment exploreFragment = new ExploreFragment();
     CartFragment cartFragment = new CartFragment();
     CategoriesFragment categoriesFragment = new CategoriesFragment();
-
+    LoginFragment loginFragment = new LoginFragment();
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -39,34 +37,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, homeFragment)
+                        .addToBackStack(null) // Add this line
                         .commit();
                 return true;
             case R.id.explore:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, exploreFragment)
+                        .addToBackStack(null) // Add this line
                         .commit();
                 return true;
             case R.id.cart:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, cartFragment)
+                        .addToBackStack(null) // Add this line
                         .commit();
                 return true;
             case R.id.categories:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, categoriesFragment)
+                        .addToBackStack(null) // Add this line
                         .commit();
                 return true;
             case R.id.account:
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, loginFragment)
+                        .addToBackStack(null) // Add this line
+                        .commit();
                 return true;
         }
         return false;
-
     }
+
 
 }

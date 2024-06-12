@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#356EEC"
-    tools:context=".Login">
+    tools:context=".LoginFragment">
 
     <ImageView
         android:id="@+id/image"
@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="72dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/login_corner"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,33 +106,34 @@
             android:textColor="@color/ic_launcher_background"
             android:textSize="14sp"
             android:textStyle="bold" />
-    </LinearLayout>
+
+          </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="20dp"
+        android:layout_marginBottom="80dp"
         android:gravity="center"
         >
-    <Spinner
-        android:id="@+id/language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="16sp"
-        android:layout_marginStart="20dp"
+        <Spinner
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
 
-        />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/language"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/language"
 
-        />
+            />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
