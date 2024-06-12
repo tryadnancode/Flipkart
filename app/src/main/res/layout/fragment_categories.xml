@@ -41,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:padding="5dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_marginBottom="150dp"
         >
@@ -50,22 +51,21 @@
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="140dp"
         tools:listitem="@layout/categories_layout"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
+
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_two_recycle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="150dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="140dp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/categories_layout"
-        app:layout_constraintLeft_toRightOf="@id/categories_recycle"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        tools:listitem="@layout/categories_layout_two"
+      />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

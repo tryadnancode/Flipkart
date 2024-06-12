@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, homeFragment)
-                        .addToBackStack(null) // Add this line
+//                        .addToBackStack(null) // Add this line
                         .commit();
                 return true;
             case R.id.explore:

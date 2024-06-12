@@ -3,6 +3,7 @@ package com.example.flipkart;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import java.util.List;
 public class CategoriesFragment extends Fragment {
     RecyclerView recyclerView, recyclerViewTwo;
     CategoriesAdapter categoriesAdapter;
+    CategoriesAdapterTwo categoriesAdapterTwo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,26 +33,30 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void LayoutManageTwo() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         recyclerViewTwo.setLayoutManager(gridLayoutManager);
+        recyclerViewTwo.setHasFixedSize(true);
+
     }
 
     private void ExploreDataTwo() {
-        List<CategoriesItem> categoriesItemList = new ArrayList<>();
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
+        List<CategoriesItem> categoriesItemList2 = new ArrayList<>();
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
+        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
 
-        categoriesAdapter = new CategoriesAdapter(getContext(),categoriesItemList);
-        recyclerViewTwo.setAdapter(categoriesAdapter);
+
+        categoriesAdapterTwo = new CategoriesAdapterTwo(categoriesItemList2);
+        recyclerViewTwo.setAdapter(categoriesAdapterTwo);
     }
 
     private void LayoutManage() {
@@ -58,19 +64,21 @@ public class CategoriesFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager
                 (getContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     private void ExploreData() {
         List<CategoriesItem> categoriesItemList = new ArrayList<>();
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList.add(new CategoriesItem(R.drawable.down));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
 
         categoriesAdapter = new CategoriesAdapter(getContext(),categoriesItemList);
         recyclerView.setAdapter(categoriesAdapter);

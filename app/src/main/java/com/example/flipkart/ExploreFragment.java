@@ -35,6 +35,7 @@ public class ExploreFragment extends Fragment {
         recyclerView.setLayoutManager(gridLayoutManager);
     }
 
+
     private void ExploreData() {
         List<ExploreItem> exploreItems = new ArrayList<>();
         exploreItems.add(new ExploreItem(R.drawable.down));

@@ -7,13 +7,18 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,9 +26,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    RecyclerView recyclerView,recentRecycler,suggestRecycler;
+    RecyclerView recyclerView, recentRecycler, suggestRecycler;
     TextView textView;
     ImageView camera;
+    Switch aSwitch;
     private Handler handler;
     private Runnable scrollRunnable;
     private int currentPosition = 0;
@@ -31,10 +37,12 @@ public class HomeFragment extends Fragment {
     private Toast backToast;
     private static final int REQUEST_PERMISSION = 300;
     private static final int REQUEST_CAMERA = 100;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -44,8 +52,9 @@ public class HomeFragment extends Fragment {
         suggestRecycler = view.findViewById(R.id.suggest_recycler);
         textView = view.findViewById(R.id.marqueeText1);
         camera = view.findViewById(R.id.camera);
+        aSwitch = view.findViewById(R.id.switchButton);
+        switchFragment();
         openCamera();
-
 
         // Enable marquee effect
         textView.setSelected(true);
@@ -61,7 +70,7 @@ public class HomeFragment extends Fragment {
         ArrayList<SuggestItem> bannerItem = Constant.getSuggestItems();
         RecentlyAdapter recentlyAdapter = new RecentlyAdapter(bannerItem);
         recentRecycler.setAdapter(recentlyAdapter);
-        LinearLayoutManager suggestItem = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        LinearLayoutManager suggestItem = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recentRecycler.setLayoutManager(suggestItem);
 
         // Set up RecyclerView for suggestRecycler
@@ -87,6 +96,40 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(scrollRunnable, 1000);
     }
 
+    private void switchFragment() {
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    showFragment();
+                } else {
+                    hideFragment();
+                }
+            }
+        });
+
+    }
+
+    private void showFragment() {
+        SwitchFragment fragment = new SwitchFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+        aSwitch.setVisibility(View.VISIBLE);
+    }
+
+    private void hideFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        if (fragment != null) {
+            fragmentTransaction.remove(fragment);
+            fragmentTransaction.commit();
+        }
+        aSwitch.setVisibility(View.GONE);
+    }
+
     private void openCamera() {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +152,7 @@ public class HomeFragment extends Fragment {
         // Stop the auto-scrolling when the fragment is destroyed
         handler.removeCallbacks(scrollRunnable);
     }
+
     OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
         @Override
         public void handleOnBackPressed() {
@@ -124,6 +168,4 @@ public class HomeFragment extends Fragment {
             backPressedTime = System.currentTimeMillis();
         }
     };
-
-
 }
