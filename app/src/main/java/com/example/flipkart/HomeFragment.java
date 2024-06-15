@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView, recentRecycler, suggestRecycler;
     TextView textView;
-    ImageView camera;
+    ImageView camera,mic;
     Switch aSwitch;
     private Handler handler;
     private Runnable scrollRunnable;
@@ -37,7 +40,7 @@ public class HomeFragment extends Fragment {
     private Toast backToast;
     private static final int REQUEST_PERMISSION = 300;
     private static final int REQUEST_CAMERA = 100;
-
+    private static final int SPEECH_REQUEST_CODE = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -52,10 +55,11 @@ public class HomeFragment extends Fragment {
         suggestRecycler = view.findViewById(R.id.suggest_recycler);
         textView = view.findViewById(R.id.marqueeText1);
         camera = view.findViewById(R.id.camera);
+        mic = view.findViewById(R.id.mic);
         aSwitch = view.findViewById(R.id.switchButton);
         switchFragment();
         openCamera();
-
+        openMic();
         // Enable marquee effect
         textView.setSelected(true);
 
@@ -96,7 +100,26 @@ public class HomeFragment extends Fragment {
         handler.postDelayed(scrollRunnable, 1000);
     }
 
-    private void switchFragment() {
+    private void openMic() {
+        mic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                // Specify the language model
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                // Specify the language for the speech recognition
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+                // Specify the prompt
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
+                // Start the activity, the intent will be resolved by the system
+                startActivityForResult(intent, SPEECH_REQUEST_CODE);
+
+            }
+
+        });
+    }
+     private void switchFragment() {
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
