@@ -6,6 +6,11 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ApiInterface {
-    @GET("photos")
-    Call<List<ResponseModelItem>> getUsers();
+
+    @GET("products")
+    Call<List<ResponseProductItem>> getImage();
+
+    @GET("products/categories")
+    Call<List<ResponseProductItem>> getCategory();
+
 }

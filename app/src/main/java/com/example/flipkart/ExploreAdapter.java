@@ -11,13 +11,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHolder> {
     Context context;
-    List<ExploreItem> exploreItems;
+    List<ResponseProductItem> exploreItems;
 
-    public ExploreAdapter(Context context, List<ExploreItem> exploreItems) {
+    public ExploreAdapter(Context context, List<ResponseProductItem> exploreItems) {
         this.context = context;
         this.exploreItems = exploreItems;
     }
@@ -31,9 +33,16 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ExploreAdapter.ViewHolder holder, int position) {
-        ExploreItem item = exploreItems.get(position);
-        holder.imageView.setImageResource(item.getExplore());
-
+        ResponseProductItem item = exploreItems.get(position);
+        Picasso.get().load(item.getImage()).into(holder.imageView);
+        holder.price.setText("$"+item.getPrice()+"");
+        Rating rating = item.getRating();
+        if (rating != null) {
+            float rateValue = rating.getRateAsFloat();
+            holder.ratingBar.setRating(rateValue);
+        } else {
+            holder.ratingBar.setRating(0); // Default rating if not available
+        }
     }
 
     @Override
@@ -43,13 +52,14 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView price;
         RatingBar ratingBar;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageExplore);
-
-            ratingBar = imageView.findViewById(R.id.ratingBar);
+            ratingBar = itemView.findViewById(R.id.rating);
+            price = itemView.findViewById(R.id.price);
 
         }
     }

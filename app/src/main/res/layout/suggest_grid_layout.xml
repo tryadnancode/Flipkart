@@ -4,11 +4,12 @@
     android:layout_width="100dp"
     android:layout_height="140dp"
     android:layout_margin="4dp"
+    card_view:cardBackgroundColor="@color/white"
     card_view:cardCornerRadius="6dp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerInside"/>
 </androidx.cardview.widget.CardView>

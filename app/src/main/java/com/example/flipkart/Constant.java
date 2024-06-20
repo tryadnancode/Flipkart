@@ -14,19 +14,6 @@ public class Constant {
         return list;
     }
 
-    public static ArrayList<SuggestItem> getSuggest() {
-        ArrayList<SuggestItem> list = new ArrayList<>();
-
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        list.add(new SuggestItem(R.drawable.down));
-        return list;
-    }
-
 
     public static ArrayList<SuggestItem> getSuggestItems() {
         ArrayList<SuggestItem> list = new ArrayList<>();
@@ -35,8 +22,6 @@ public class Constant {
         list.add(new SuggestItem(R.drawable.down));
         list.add(new SuggestItem(R.drawable.down));
         list.add(new SuggestItem(R.drawable.down));
-
         return list;
     }
-
 }

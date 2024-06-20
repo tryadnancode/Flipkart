@@ -1,6 +1,5 @@
 package com.example.flipkart;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +8,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
-    private final ArrayList<SuggestItem> list;
+    private final List<ResponseProductItem> list;
 
-    public SuggestAdapter(ArrayList<SuggestItem> list) {
+
+    public SuggestAdapter(List<ResponseProductItem> list) {
         this.list = list;
+
     }
 
     @NonNull
@@ -28,8 +30,9 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull SuggestAdapter.ViewHolder holder, int position) {
-        SuggestItem suggestItem = list.get(position);
-        holder.imageView.setImageResource(suggestItem.getImage());
+        ResponseProductItem suggestItem = list.get(position);
+//        holder.imageView.setImageResource(suggestItem.getImage());
+        Picasso.get().load(suggestItem.getImage()).into(holder.imageView);
     }
 
     @Override

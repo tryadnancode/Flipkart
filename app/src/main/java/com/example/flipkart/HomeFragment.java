@@ -26,7 +26,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView, recentRecycler, suggestRecycler;
@@ -60,6 +65,7 @@ public class HomeFragment extends Fragment {
         switchFragment();
         openCamera();
         openMic();
+        fetchSuggestedItems();
         // Enable marquee effect
         textView.setSelected(true);
 
@@ -77,14 +83,6 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager suggestItem = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recentRecycler.setLayoutManager(suggestItem);
 
-        // Set up RecyclerView for suggestRecycler
-        ArrayList<SuggestItem> trendList = Constant.getSuggest();
-        SuggestAdapter suggestAdapter = new SuggestAdapter(trendList);
-        suggestRecycler.setAdapter(suggestAdapter);
-        suggestRecycler.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        suggestRecycler.setLayoutManager(gridLayoutManager);
-
         // Auto-scroll setup for the banner RecyclerView
         handler = new Handler();
         scrollRunnable = new Runnable() {
@@ -101,33 +99,26 @@ public class HomeFragment extends Fragment {
     }
 
     private void openMic() {
-        mic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mic.setOnClickListener(v -> {
 
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                // Specify the language model
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                // Specify the language for the speech recognition
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-                // Specify the prompt
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
-                // Start the activity, the intent will be resolved by the system
-                startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
-            }
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            // Specify the language model
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            // Specify the language for the speech recognition
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            // Specify the prompt
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
+            // Start the activity, the intent will be resolved by the system
+            startActivityForResult(intent, SPEECH_REQUEST_CODE);
 
         });
     }
      private void switchFragment() {
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    showFragment();
-                } else {
-                    hideFragment();
-                }
+        aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                showFragment();
+            } else {
+                hideFragment();
             }
         });
 
@@ -191,4 +182,31 @@ public class HomeFragment extends Fragment {
             backPressedTime = System.currentTimeMillis();
         }
     };
+    // Set up RecyclerView for suggestRecycler
+    private void fetchSuggestedItems() {
+        ApiInterface apiInterface = RetrofitClient.getRetrofitInstance().create(ApiInterface.class);
+        Call<List<ResponseProductItem>> call = apiInterface.getImage();
+        call.enqueue(new Callback<List<ResponseProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ResponseProductItem>> call, Response<List<ResponseProductItem>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ResponseProductItem> allUsers = response.body();
+                    SuggestAdapter suggestAdapter = new SuggestAdapter(allUsers);
+                    suggestRecycler.setAdapter(suggestAdapter);
+                    suggestRecycler.setVisibility(View.VISIBLE);
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+                    suggestRecycler.setLayoutManager(gridLayoutManager);
+                } else {
+                    Log.e("HomeFragment", "Response unsuccessful: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseProductItem>> call, Throwable t) {
+                Log.e("HomeFragment", "onFailure: " + t.getMessage());
+                Toast.makeText(getContext(), "Failed to fetch data. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
