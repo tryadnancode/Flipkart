@@ -3,7 +3,6 @@ package com.example.flipkart;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
@@ -34,7 +30,7 @@ import com.hbb20.CountryCodePicker;
 import java.util.concurrent.TimeUnit;
 
 public class LoginFragment extends Fragment {
-    private ImageView imageView;
+    private ImageView cross;
     private TextView emailId;
     private Spinner spinner;
     private String verificationId;
@@ -59,7 +55,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void findId(View rootView) {
-        imageView = rootView.findViewById(R.id.cross);
+        cross = rootView.findViewById(R.id.cross);
         spinner = rootView.findViewById(R.id.language);
         emailId = rootView.findViewById(R.id.email_id);
         sendCode = rootView.findViewById(R.id.sendCode);
@@ -71,7 +67,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void onClick() {
-        imageView.setOnClickListener(v -> {
+        cross.setOnClickListener(v -> {
             Intent i = new Intent(requireContext(), MainActivity.class);
             startActivity(i);
             requireActivity().finish();
@@ -94,29 +90,22 @@ public class LoginFragment extends Fragment {
 
         countryCodePicker.setDefaultCountryUsingNameCode("IN");
 
-        sendCode.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String number =enterNumber.getText().toString();
-                if(TextUtils.isEmpty(number)){
-                    Toast.makeText(getContext(), "Enter Phone Number", Toast.LENGTH_SHORT).show();
-                }else {
-                    String fullPhoneNumber = "+" + countryCodePicker.getSelectedCountryCode() + number;
-                    sendVerificationCode(fullPhoneNumber);
-                }
+        sendCode.setOnClickListener(v -> {
+            String number =enterNumber.getText().toString();
+            if(TextUtils.isEmpty(number)){
+                Toast.makeText(getContext(), "Enter Phone Number", Toast.LENGTH_SHORT).show();
+            }else {
+                String fullPhoneNumber = "+" + countryCodePicker.getSelectedCountryCode() + number;
+                sendVerificationCode(fullPhoneNumber);
             }
         });
 
-        verifyCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String code = enterCode.getText().toString();
-                if(TextUtils.isEmpty(code)){
-                    Toast.makeText(getContext(), "Enter code", Toast.LENGTH_SHORT).show();
-                }else {
-                    enterVerifyCode(code);
-                }
+        verifyCode.setOnClickListener(v -> {
+            String code = enterCode.getText().toString();
+            if(TextUtils.isEmpty(code)){
+                Toast.makeText(getContext(), "Enter code", Toast.LENGTH_SHORT).show();
+            }else {
+                enterVerifyCode(code);
             }
         });
     }
@@ -156,14 +145,11 @@ public class LoginFragment extends Fragment {
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
     mAuth.signInWithCredential(phoneAuthCredential)
-            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
-                    }
+            .addOnCompleteListener(getActivity(), task -> {
+                if(task.isSuccessful()){
+                    Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
                 }
             });
     }

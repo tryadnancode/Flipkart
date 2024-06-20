@@ -60,6 +60,7 @@
       </LinearLayout>
   </com.google.android.material.appbar.MaterialToolbar>
 
+
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/explore_recycle"
       android:layout_width="match_parent"
