@@ -19,6 +19,7 @@ recyclerviewVersion = "1.2.1"
 retrofit = "2.9.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.0.0"
+shimmer = "0.5.0"
 
 [libraries]
 ccp = { module = "com.hbb20:ccp", version.ref = "ccp" }
@@ -40,6 +41,7 @@ recyclerview-v121 = { module = "androidx.recyclerview:recyclerview", version.ref
 recyclerview-v130 = { module = "androidx.recyclerview:recyclerview", version.ref = "androidxRecyclerview" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

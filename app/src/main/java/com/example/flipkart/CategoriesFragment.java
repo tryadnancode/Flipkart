@@ -74,16 +74,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void ExploreData() {
-//        List<CategoriesItem> categoriesItemList = new ArrayList<>();
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
-//        categoriesItemList.add(new CategoriesItem(R.drawable.down_bg));
+
         ApiInterface apiInterface = RetrofitClient.getRetrofitInstance().create(ApiInterface.class);
         Call<List<ResponseProductItem>> listCall = apiInterface.getImage();
         listCall.enqueue(new Callback<List<ResponseProductItem>>() {

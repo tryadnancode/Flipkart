@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,6 +23,7 @@ import retrofit2.Response;
 public class ExploreFragment extends Fragment {
     RecyclerView recyclerView;
     ExploreAdapter exploreAdapter;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,6 +31,7 @@ public class ExploreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
         recyclerView = view.findViewById(R.id.explore_recycle);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer);
         ExploreData();
         LayoutManage();
 
@@ -47,13 +51,14 @@ public class ExploreFragment extends Fragment {
         listCall.enqueue(new Callback<List<ResponseProductItem>>() {
             @Override
             public void onResponse(@NonNull Call<List<ResponseProductItem>> call, @NonNull Response<List<ResponseProductItem>> response) {
+                shimmerFrameLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 if (response.isSuccessful() && response.body() != null) {
                     List<ResponseProductItem> items = response.body();
                     exploreAdapter = new ExploreAdapter(getContext(), items);
                     recyclerView.setAdapter(exploreAdapter);
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<List<ResponseProductItem>> call, @NonNull Throwable t) {
                 Log.e("HomeFragment", "onFailure: " + t.getMessage());

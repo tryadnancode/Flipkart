@@ -24,7 +24,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class EmailActivity extends AppCompatActivity {
@@ -78,13 +77,13 @@ public class EmailActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-//        mAuth.signOut();
+        mAuth.signOut();
         mGoogleSignInClient.signOut().addOnCompleteListener(task -> {
             Toast.makeText(EmailActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
             // Optionally, navigate to a different activity
-//            Intent intent = new Intent(EmailActivity.this, MainActivity.class);
-//            startActivity(intent);
-            mAuth.signOut();
+            Intent intent = new Intent(EmailActivity.this, MainActivity.class);
+            startActivity(intent);
+//            mAuth.signOut();
             finish();
         });
     }

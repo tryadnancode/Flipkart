@@ -54,4 +54,7 @@ dependencies {
     implementation (libs.logging.interceptor)
     implementation (libs.recyclerview)
     implementation (libs.picasso)
+    implementation (libs.shimmer)
+    implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+
 }

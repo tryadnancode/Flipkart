@@ -5,31 +5,27 @@
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    app:cardBackgroundColor="@color/cardview_light_background"
+    app:cardBackgroundColor="@color/my_dark_primary"
     app:cardCornerRadius="10dp">
     <LinearLayout
-        android:id="@+id/click_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
 
-    <ImageView
-        android:id="@+id/imageExplore"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:scaleType="centerInside"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerInside"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="price"
-            android:id="@+id/price"
+            android:text=""
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textAlignment="center"/>
         <RatingBar
-            android:id="@+id/rating"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,6 +35,6 @@
             android:layout_gravity="center"
             android:theme="@style/RatingBar"
             android:stepSize="0.1"
-           />
+            />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

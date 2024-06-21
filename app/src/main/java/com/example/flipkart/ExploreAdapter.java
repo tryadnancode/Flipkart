@@ -1,10 +1,12 @@
 package com.example.flipkart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     @NonNull
     @Override
     public ExploreAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.explore_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.explore_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -35,7 +37,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
     public void onBindViewHolder(@NonNull ExploreAdapter.ViewHolder holder, int position) {
         ResponseProductItem item = exploreItems.get(position);
         Picasso.get().load(item.getImage()).into(holder.imageView);
-        holder.price.setText("$"+item.getPrice()+"");
+        holder.price.setText("$" + item.getPrice() + "");
         Rating rating = item.getRating();
         if (rating != null) {
             float rateValue = rating.getRateAsFloat();
@@ -43,6 +45,22 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         } else {
             holder.ratingBar.setRating(0); // Default rating if not available
         }
+        holder.clickDetails.setOnClickListener(v -> imageDetails(v, holder.getAdapterPosition()));
+
+}
+
+    private void imageDetails(View v, int adapterPosition) {
+        Intent i = new Intent(v.getContext(), ImageDetailsOfExplore_Activity.class);
+        i.putExtra("image",exploreItems.get(adapterPosition).getImage());
+        i.putExtra("title",exploreItems.get(adapterPosition).getTitle());
+        i.putExtra("description",exploreItems.get(adapterPosition).getDescription());
+        i.putExtra("price",exploreItems.get(adapterPosition).getPrice()+"");
+        Rating rating = exploreItems.get(adapterPosition).getRating();
+        if (rating != null) {
+            String ratingStr = String.valueOf(rating.getRateAsFloat());
+            i.putExtra("rating", ratingStr);
+        }
+         v.getContext().startActivity(i);
     }
 
     @Override
@@ -54,13 +72,14 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         ImageView imageView;
         TextView price;
         RatingBar ratingBar;
+        LinearLayout clickDetails;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageExplore);
             ratingBar = itemView.findViewById(R.id.rating);
             price = itemView.findViewById(R.id.price);
-
+            clickDetails = itemView.findViewById(R.id.click_details);
         }
     }
 }

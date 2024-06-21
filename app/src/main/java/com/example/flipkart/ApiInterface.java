@@ -10,7 +10,5 @@ public interface ApiInterface {
     @GET("products")
     Call<List<ResponseProductItem>> getImage();
 
-    @GET("products/categories")
-    Call<List<ResponseProductItem>> getCategory();
 
 }
