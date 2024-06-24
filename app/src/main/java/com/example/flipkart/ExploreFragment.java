@@ -1,10 +1,12 @@
 package com.example.flipkart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,18 +26,27 @@ public class ExploreFragment extends Fragment {
     RecyclerView recyclerView;
     ExploreAdapter exploreAdapter;
     ShimmerFrameLayout shimmerFrameLayout;
+    ImageView search,mic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
         recyclerView = view.findViewById(R.id.explore_recycle);
         shimmerFrameLayout = view.findViewById(R.id.shimmer);
+        search = view.findViewById(R.id.search);
+        mic = view.findViewById(R.id.mic1);
         ExploreData();
         LayoutManage();
-
+        onClick();
         return view;
+    }
+
+    private void onClick() {
+        search.setOnClickListener(v -> {
+            Intent i = new Intent(requireContext(), SearchActivity.class);
+            startActivity(i);
+        });
     }
 
     private void LayoutManage() {

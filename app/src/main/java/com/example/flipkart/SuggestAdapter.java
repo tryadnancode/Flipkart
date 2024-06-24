@@ -19,7 +19,6 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
 
     public SuggestAdapter(List<ResponseProductItem> list) {
         this.list = list;
-
     }
 
     @NonNull

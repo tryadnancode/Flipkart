@@ -47,23 +47,23 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void ExploreDataTwo() {
-        List<CategoriesItem> categoriesItemList2 = new ArrayList<>();
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.down));
-        categoriesItemList2.add(new CategoriesItem(R.drawable.img_2));
+        ApiInterface apiInterface = RetrofitClient.getRetrofitInstance().create(ApiInterface.class);
+        Call<List<ResponseProductItem>> listCall = apiInterface.getImage();
+        listCall.enqueue(new Callback<List<ResponseProductItem>>() {
+            @Override
+            public void onResponse(Call<List<ResponseProductItem>> call, Response<List<ResponseProductItem>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    List<ResponseProductItem> items = response.body();
+                    categoriesAdapterTwo = new CategoriesAdapterTwo(items);
+                    recyclerViewTwo.setAdapter(categoriesAdapterTwo);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<ResponseProductItem>> call, Throwable t) {
+                Log.e("HomeFragment", "onFailure: " + t.getMessage());
 
-
-        categoriesAdapterTwo = new CategoriesAdapterTwo(categoriesItemList2);
-        recyclerViewTwo.setAdapter(categoriesAdapterTwo);
+            }
+        });
     }
 
     private void LayoutManage() {

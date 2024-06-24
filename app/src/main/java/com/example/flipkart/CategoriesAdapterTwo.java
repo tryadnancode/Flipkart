@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class CategoriesAdapterTwo extends RecyclerView.Adapter<CategoriesAdapterTwo.ViewHolder> {
-    List<CategoriesItem> categoriesItems;
+    List<ResponseProductItem>  categoriesItems;
 
-    public CategoriesAdapterTwo(List<CategoriesItem> categoriesItems) {
+    public CategoriesAdapterTwo(List<ResponseProductItem> categoriesItems) {
         this.categoriesItems = categoriesItems;
     }
 
@@ -26,8 +28,9 @@ public class CategoriesAdapterTwo extends RecyclerView.Adapter<CategoriesAdapter
 
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdapterTwo.ViewHolder holder, int position) {
-        CategoriesItem item = categoriesItems.get(position);
-        holder.imageView.setImageResource(item.getCategories());
+       ResponseProductItem item = categoriesItems.get(position);
+//        holder.imageView.setImageResource(item.getCategories());
+        Picasso.get().load(item.getImage()).into(holder.imageView);
     }
 
     @Override

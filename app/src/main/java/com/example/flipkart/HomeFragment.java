@@ -145,18 +145,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void openCamera() {
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        camera.setOnClickListener(v -> {
 
-                if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
-                } else {
-                    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                }
-
+            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
+            } else {
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivityForResult(intent, REQUEST_CAMERA);
             }
+
         });
     }
 

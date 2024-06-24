@@ -38,6 +38,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
         ResponseProductItem item = exploreItems.get(position);
         Picasso.get().load(item.getImage()).into(holder.imageView);
         holder.price.setText("$" + item.getPrice() + "");
+        holder.category.setText(item.getCategory());
         Rating rating = item.getRating();
         if (rating != null) {
             float rateValue = rating.getRateAsFloat();
@@ -70,7 +71,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView price;
+        TextView price,category;
         RatingBar ratingBar;
         LinearLayout clickDetails;
 
@@ -80,6 +81,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.ViewHold
             ratingBar = itemView.findViewById(R.id.rating);
             price = itemView.findViewById(R.id.price);
             clickDetails = itemView.findViewById(R.id.click_details);
+            category = itemView.findViewById(R.id.exploreCategory);
         }
     }
 }

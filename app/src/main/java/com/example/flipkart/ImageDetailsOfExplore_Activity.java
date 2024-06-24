@@ -1,18 +1,13 @@
 package com.example.flipkart;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +21,7 @@ public class ImageDetailsOfExplore_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_details_of_explore);
         imageView = findViewById(R.id.img);
+        rotateImageAutomatically();
         title = findViewById(R.id.title_d);
         description = findViewById(R.id.discription_d);
         price = findViewById(R.id.price_d);
@@ -56,5 +52,12 @@ public class ImageDetailsOfExplore_Activity extends AppCompatActivity {
             zoomIntent.putExtra("image", img_st);
             startActivity(zoomIntent);
         });
+    }
+    private void rotateImageAutomatically() {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(imageView, "rotation", -90f, 90f);
+        animator.setDuration(4000); // Duration in milliseconds for one complete cycle
+        animator.setRepeatCount(ObjectAnimator.INFINITE); // Repeat indefinitely
+        animator.setRepeatMode(ObjectAnimator.REVERSE); // Reverse the animation after each iteration
+        animator.start();
     }
 }
