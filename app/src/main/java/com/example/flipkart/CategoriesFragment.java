@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,12 +83,11 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onResponse(Call<List<ResponseProductItem>> call, Response<List<ResponseProductItem>> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    List<ResponseProductItem> items = response.body();
+                    List<ResponseProductItem> items = filterCategories(response.body());
                     categoriesAdapter = new CategoriesAdapter(getContext(),items);
                     recyclerView.setAdapter(categoriesAdapter);
                 }
             }
-
             @Override
             public void onFailure(Call<List<ResponseProductItem>> call, Throwable t) {
                 Log.e("HomeFragment", "onFailure: " + t.getMessage());
@@ -94,5 +95,15 @@ public class CategoriesFragment extends Fragment {
             }
         });
 
+    }
+    //Getting one item from category
+    private List<ResponseProductItem> filterCategories(List<ResponseProductItem> body) {
+        Map<String, ResponseProductItem> categoryMap = new LinkedHashMap<>();
+        for (ResponseProductItem item : body) {
+            if (!categoryMap.containsKey(item.getCategory())) {
+                categoryMap.put(item.getCategory(), item);
+            }
+        }
+        return new ArrayList<>(categoryMap.values());
     }
 }
