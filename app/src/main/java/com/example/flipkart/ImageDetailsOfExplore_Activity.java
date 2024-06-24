@@ -45,8 +45,7 @@ public class ImageDetailsOfExplore_Activity extends AppCompatActivity {
         ratingBar.setRating(Float.parseFloat(rating_st));
 
         back.setOnClickListener(v -> onBackPressed());
-//        product.setText(title_st);
-        
+
         imageView.setOnClickListener(v -> {
             Intent zoomIntent = new Intent(ImageDetailsOfExplore_Activity.this, ZoomImageActivity.class);
             zoomIntent.putExtra("image", img_st);
