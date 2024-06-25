@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -56,5 +57,5 @@ dependencies {
     implementation (libs.picasso)
     implementation (libs.shimmer)
     implementation ("com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
-
+    implementation (libs.firebase.messaging.v2000)
 }

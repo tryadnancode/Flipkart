@@ -7,11 +7,13 @@
     android:layout_height="120dp"
     android:layout_margin="5dp"
     app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="@color/white"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <ImageView
         android:id="@+id/recent_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"/>
 </androidx.cardview.widget.CardView>

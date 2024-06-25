@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
     private int currentPosition = 0;
     private long backPressedTime;
     private Toast backToast;
+    ShimmerFrameLayout shimmerFrameLayout;
     private static final int REQUEST_PERMISSION = 300;
     private static final int REQUEST_CAMERA = 100;
     private static final int SPEECH_REQUEST_CODE = 0;
@@ -62,6 +65,7 @@ public class HomeFragment extends Fragment {
         camera = view.findViewById(R.id.camera);
         mic = view.findViewById(R.id.mic);
         aSwitch = view.findViewById(R.id.switchButton);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer2);
         switchFragment();
         openCamera();
         openMic();
@@ -77,8 +81,8 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(bannerLayoutManager);
 
         // Set up RecyclerView for recentRecycler
-        ArrayList<SuggestItem> bannerItem = Constant.getSuggestItems();
-        RecentlyAdapter recentlyAdapter = new RecentlyAdapter(bannerItem);
+        ArrayList<SuggestItem> suggestItems = Constant.getSuggestItems();
+        RecentlyAdapter recentlyAdapter = new RecentlyAdapter(suggestItems);
         recentRecycler.setAdapter(recentlyAdapter);
         LinearLayoutManager suggestItem = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recentRecycler.setLayoutManager(suggestItem);
@@ -186,6 +190,8 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<ResponseProductItem>>() {
             @Override
             public void onResponse(Call<List<ResponseProductItem>> call, Response<List<ResponseProductItem>> response) {
+                shimmerFrameLayout.setVisibility(View.GONE);
+                suggestRecycler.setVisibility(View.VISIBLE);
                 if (response.isSuccessful() && response.body() != null) {
                     List<ResponseProductItem> allUsers = response.body();
                     SuggestAdapter suggestAdapter = new SuggestAdapter(allUsers);

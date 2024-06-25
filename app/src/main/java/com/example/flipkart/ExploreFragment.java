@@ -1,15 +1,22 @@
 package com.example.flipkart;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +33,10 @@ public class ExploreFragment extends Fragment {
     RecyclerView recyclerView;
     ExploreAdapter exploreAdapter;
     ShimmerFrameLayout shimmerFrameLayout;
-    ImageView search,mic;
+    ImageView search,mic,camera,cart;
+    private static final int REQUEST_PERMISSION = 300;
+    private static final int REQUEST_CAMERA = 100;
+     private static final int REQUEST_MIC = 200;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +46,8 @@ public class ExploreFragment extends Fragment {
         shimmerFrameLayout = view.findViewById(R.id.shimmer);
         search = view.findViewById(R.id.search);
         mic = view.findViewById(R.id.mic1);
+        camera = view.findViewById(R.id.camera101);
+        cart = view.findViewById(R.id.cart101);
         ExploreData();
         LayoutManage();
         onClick();
@@ -47,8 +59,35 @@ public class ExploreFragment extends Fragment {
             Intent i = new Intent(requireContext(), SearchActivity.class);
             startActivity(i);
         });
+        cart.setOnClickListener(v -> {
+            // Navigate to CartFragment
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, new CartFragment());
+            fragmentTransaction.commit();
+        });
+        camera.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
+            } else {
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivityForResult(intent, REQUEST_CAMERA);
+            }
+        });
+        mic.setOnClickListener(v -> {
+  if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MIC);
+            } else {
+                startVoiceRecognition();
+            }
+        });
     }
-
+  private void startVoiceRecognition() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...");
+        startActivityForResult(intent, REQUEST_MIC);
+    }
     private void LayoutManage() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -78,3 +117,4 @@ public class ExploreFragment extends Fragment {
         });
     }
 }
+
