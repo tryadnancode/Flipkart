@@ -31,7 +31,7 @@
             android:layout_width="140dp"
             android:layout_height="35dp"
             android:src="@drawable/img_11"
-            android:background="@drawable/custom_button"
+            android:background="@drawable/custom_button_white"
             android:scaleType="centerInside"
             android:layout_gravity="end"
             android:layout_marginEnd="20dp"
