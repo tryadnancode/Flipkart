@@ -10,7 +10,6 @@ public interface ApiInterface {
 
     @GET("products")
     Call<List<ResponseProductItem>> getImage();
-
-    @GET("search")
-    Call<List<ResponseProductItem>> searchProduct(@Query("query") String query);
+    @GET("products")
+    Call<List<ResponseProductItem>> getProducts();
 }

@@ -11,14 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHolder> {
-    private final List<ResponseProductItem> list;
-
+    private List<ResponseProductItem> list;
+    private List<ResponseProductItem> fullList;
+    private static final int DEFAULT_ITEM_COUNT = 3;
+    private boolean isShowingAll = false;
 
     public SuggestAdapter(List<ResponseProductItem> list) {
-        this.list = list;
+        this.fullList = list;
+        this.list = new ArrayList<>(list.subList(0, Math.min(DEFAULT_ITEM_COUNT, list.size())));
     }
 
     @NonNull
@@ -31,7 +35,6 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull SuggestAdapter.ViewHolder holder, int position) {
         ResponseProductItem suggestItem = list.get(position);
-//        holder.imageView.setImageResource(suggestItem.getImage());
         Picasso.get().load(suggestItem.getImage()).into(holder.imageView);
         holder.textView.setText(suggestItem.getCategory());
     }
@@ -39,6 +42,24 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.ViewHold
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void showAllItems() {
+        list = new ArrayList<>(fullList);
+        notifyDataSetChanged();
+    }
+
+    public void showDefaultItems() {
+        list = new ArrayList<>(fullList.subList(0, Math.min(DEFAULT_ITEM_COUNT, fullList.size())));
+        notifyDataSetChanged();
+    }
+
+    public boolean isShowingAll() {
+        return isShowingAll;
+    }
+
+    public void setShowingAll(boolean showingAll) {
+        isShowingAll = showingAll;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

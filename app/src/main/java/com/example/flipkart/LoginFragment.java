@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class LoginFragment extends Fragment {
     private TextView emailId;
     private Spinner spinner;
     private String verificationId;
+    ProgressBar progressBar;
     AppCompatButton sendCode,verifyCode;
     EditText enterCode;
     FirebaseAuth mAuth;
@@ -64,6 +66,7 @@ public class LoginFragment extends Fragment {
         enterNumber = rootView.findViewById(R.id.enterNumber);
         countryCodePicker = rootView.findViewById(R.id.country_code);
         mAuth = FirebaseAuth.getInstance();
+        progressBar = rootView.findViewById(R.id.progressBar2);
     }
 
     private void onClick() {
@@ -92,6 +95,7 @@ public class LoginFragment extends Fragment {
 
         sendCode.setOnClickListener(v -> {
             String number =enterNumber.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
             if(TextUtils.isEmpty(number)){
                 Toast.makeText(getContext(), "Enter Phone Number", Toast.LENGTH_SHORT).show();
             }else {
@@ -102,8 +106,11 @@ public class LoginFragment extends Fragment {
 
         verifyCode.setOnClickListener(v -> {
             String code = enterCode.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
             if(TextUtils.isEmpty(code)){
                 Toast.makeText(getContext(), "Enter code", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+
             }else {
                 enterVerifyCode(code);
             }
@@ -125,6 +132,8 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onVerificationFailed(@NonNull FirebaseException e) {
                             Toast.makeText(getContext(), "Verification failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+
                         }
 
                         @Override
@@ -132,6 +141,7 @@ public class LoginFragment extends Fragment {
                             super.onCodeSent(s, forceResendingToken);
                             verificationId = s;
                             Toast.makeText(getContext(), "Code sent", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
 
                         }
                     }).build();
@@ -146,10 +156,15 @@ public class LoginFragment extends Fragment {
     private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
     mAuth.signInWithCredential(phoneAuthCredential)
             .addOnCompleteListener(getActivity(), task -> {
+                progressBar.setVisibility(View.VISIBLE);
+
                 if(task.isSuccessful()){
                     Toast.makeText(getContext(), "Login successful", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }else {
                     Toast.makeText(getContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+
                 }
             });
     }
@@ -158,9 +173,13 @@ public class LoginFragment extends Fragment {
         try{
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             signInWithPhoneAuthCredential(credential);
+            progressBar.setVisibility(View.GONE);
+
         }
         catch (Exception e){
             Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.GONE);
+
         }
     }
 }

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +37,6 @@ public class ExploreFragment extends Fragment {
     ImageView search,mic,camera,cart;
     private static final int REQUEST_PERMISSION = 300;
     private static final int REQUEST_CAMERA = 100;
-     private static final int REQUEST_MIC = 200;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,18 +75,9 @@ public class ExploreFragment extends Fragment {
             }
         });
         mic.setOnClickListener(v -> {
-  if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_MIC);
-            } else {
-                startVoiceRecognition();
-            }
+            Intent i = new Intent(requireContext(), SpeakSearch.class);
+            startActivity(i);
         });
-    }
-  private void startVoiceRecognition() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...");
-        startActivityForResult(intent, REQUEST_MIC);
     }
     private void LayoutManage() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);

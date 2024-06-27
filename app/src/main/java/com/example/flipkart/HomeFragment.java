@@ -1,5 +1,6 @@
 package com.example.flipkart;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,7 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,8 +39,11 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerView, recentRecycler, suggestRecycler;
+    AppCompatImageButton mart, grocery;
+    Button showAll;
     TextView textView;
-    ImageView camera,mic;
+    ImageView camera, mic;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch aSwitch;
     private Handler handler;
     private Runnable scrollRunnable;
@@ -49,6 +54,8 @@ public class HomeFragment extends Fragment {
     private static final int REQUEST_PERMISSION = 300;
     private static final int REQUEST_CAMERA = 100;
     private static final int SPEECH_REQUEST_CODE = 0;
+    private SuggestAdapter suggestAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -66,28 +73,43 @@ public class HomeFragment extends Fragment {
         mic = view.findViewById(R.id.mic);
         aSwitch = view.findViewById(R.id.switchButton);
         shimmerFrameLayout = view.findViewById(R.id.shimmer2);
+        mart = view.findViewById(R.id.flipkart_mart);
+        grocery = view.findViewById(R.id.flipkart_grocery);
+        grocery.setOnClickListener(v -> {
+            Intent i = new Intent(requireContext(), FlipkartGrocery.class);
+            startActivity(i);
+        });
+        showAll = view.findViewById(R.id.show_all);
+        showAll.setOnClickListener(v -> {
+            if (suggestAdapter.isShowingAll()) {
+                suggestAdapter.showDefaultItems();
+                suggestAdapter.setShowingAll(false);
+                showAll.setText("Show All");
+            } else {
+                suggestAdapter.showAllItems();
+                suggestAdapter.setShowingAll(true);
+                showAll.setText("Show Less");
+            }
+        });
         switchFragment();
         openCamera();
         openMic();
         fetchSuggestedItems();
-        // Enable marquee effect
+
         textView.setSelected(true);
 
-        // Set up RecyclerView for reward banners
         ArrayList<BannerItem> bannerList = Constant.getBanner();
         ScrollAdapter rewardBannerAdapter = new ScrollAdapter(bannerList);
         recyclerView.setAdapter(rewardBannerAdapter);
         LinearLayoutManager bannerLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(bannerLayoutManager);
 
-        // Set up RecyclerView for recentRecycler
         ArrayList<SuggestItem> suggestItems = Constant.getSuggestItems();
         RecentlyAdapter recentlyAdapter = new RecentlyAdapter(suggestItems);
         recentRecycler.setAdapter(recentlyAdapter);
         LinearLayoutManager suggestItem = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recentRecycler.setLayoutManager(suggestItem);
 
-        // Auto-scroll setup for the banner RecyclerView
         handler = new Handler();
         scrollRunnable = new Runnable() {
             @Override
@@ -104,20 +126,15 @@ public class HomeFragment extends Fragment {
 
     private void openMic() {
         mic.setOnClickListener(v -> {
-
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            // Specify the language model
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            // Specify the language for the speech recognition
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-            // Specify the prompt
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak something...");
-            // Start the activity, the intent will be resolved by the system
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
-
         });
     }
-     private void switchFragment() {
+
+    private void switchFragment() {
         aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 showFragment();
@@ -125,7 +142,6 @@ public class HomeFragment extends Fragment {
                 hideFragment();
             }
         });
-
     }
 
     private void showFragment() {
@@ -150,32 +166,29 @@ public class HomeFragment extends Fragment {
 
     private void openCamera() {
         camera.setOnClickListener(v -> {
-
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_PERMISSION);
             } else {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 startActivityForResult(intent, REQUEST_CAMERA);
             }
-
         });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Stop the auto-scrolling when the fragment is destroyed
         handler.removeCallbacks(scrollRunnable);
     }
 
-    OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+    OnBackPressedCallback callback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
             if (backPressedTime + 2000 > System.currentTimeMillis()) {
                 if (backToast != null) {
                     backToast.cancel();
                 }
-                requireActivity().finish(); // Finish the activity
+                requireActivity().finish();
             } else {
                 backToast = Toast.makeText(requireContext(), "Press again to exit", Toast.LENGTH_SHORT);
                 backToast.show();
@@ -183,7 +196,7 @@ public class HomeFragment extends Fragment {
             backPressedTime = System.currentTimeMillis();
         }
     };
-    // Set up RecyclerView for suggestRecycler
+
     private void fetchSuggestedItems() {
         ApiInterface apiInterface = RetrofitClient.getRetrofitInstance().create(ApiInterface.class);
         Call<List<ResponseProductItem>> call = apiInterface.getImage();
@@ -194,7 +207,7 @@ public class HomeFragment extends Fragment {
                 suggestRecycler.setVisibility(View.VISIBLE);
                 if (response.isSuccessful() && response.body() != null) {
                     List<ResponseProductItem> allUsers = response.body();
-                    SuggestAdapter suggestAdapter = new SuggestAdapter(allUsers);
+                    suggestAdapter = new  SuggestAdapter(allUsers);
                     suggestRecycler.setAdapter(suggestAdapter);
                     suggestRecycler.setVisibility(View.VISIBLE);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
@@ -211,5 +224,4 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 }
