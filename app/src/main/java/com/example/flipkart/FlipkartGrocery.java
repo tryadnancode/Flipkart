@@ -29,6 +29,7 @@ public class FlipkartGrocery extends AppCompatActivity {
         flipkart.setOnClickListener(v -> {
             Intent i = new Intent(FlipkartGrocery.this, MainActivity.class);
             startActivity(i);
+            finish();
         });
         ArrayList<GroceryItemCategory> items = Constant.getGroceryItem();
         GroceryCategoryAdapter groceryCategoryAdapter = new GroceryCategoryAdapter(items);

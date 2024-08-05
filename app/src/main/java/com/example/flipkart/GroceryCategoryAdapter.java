@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class GroceryCategoryAdapter extends RecyclerView.Adapter<GroceryCategoryAdapter.ViewHolder> {
-    private ArrayList<GroceryItemCategory> list;
+    private final ArrayList<GroceryItemCategory> list;
 
     public GroceryCategoryAdapter(ArrayList<GroceryItemCategory> list) {
         this.list = list;
